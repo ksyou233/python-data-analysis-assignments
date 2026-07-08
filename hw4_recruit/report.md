@@ -193,7 +193,8 @@
 
 ## 七、关键代码与产物
 
-- 数据下载：`code/01_crawl_jobs.py`（优先读取本地真实 parquet / 已验证结果，再导出分析用 CSV）
+- 数据加载：`code/01b_load_real_data.py` — 从 HF 数据集构建真实 `ai_jobs.csv`
+- 统一入口：`code/01_crawl_jobs.py` — 代理到 `01b_load_real_data.py`
 - 配置：`code/config.py`（HF_TOKEN）
 - 分析建模：`code/02_analyze_jobs.py`
 - 数据：`data/data_jobs_raw.parquet`（75MB，原始 parquet）

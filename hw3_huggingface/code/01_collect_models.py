@@ -41,7 +41,6 @@ import time
 from pathlib import Path
 from typing import Optional
 
-import numpy as np
 import pandas as pd
 import requests
 
@@ -69,20 +68,9 @@ DIRECTIONS = {
 }
 
 
-# 已知的 Size → 参数量映射（常见模型）
-SIZE_LABEL_RANK = {
-    "xxs": 1, "xs": 2, "s": 3, "sm": 3,
-    "small": 4, "m": 5, "med": 5,
-    "medium": 6, "l": 7, "lg": 7,
-    "large": 8, "xl": 9, "xxl": 10,
-    "tiny": 2, "base": 4, "mini": 3,
-}
-# 框架出现频次（先验，用于样本生成）
-FRAMEWORKS = ["PyTorch", "Transformers", "JAX", "TensorFlow", "Diffusers",
-              "Safetensors", "ONNX", "GGUF", "MLX"]
+# 已知许可证列表（用于 API 返回字段匹配）
 LICENSES = ["apache-2.0", "mit", "openrail", "cc-by-sa-4.0",
             "other", "gpl-3.0", "llama3", "llama2"]
-HAS_ARXIV = True
 
 
 def hf_token() -> str:
@@ -157,89 +145,8 @@ def fetch_top_models(direction: str, top_n: int = 100,
         except Exception as e:
             last_err = e
             time.sleep(2 + random.random() * 3)
-    print(f"[warn] {direction}: 接口失败 {last_err} -> 使用离线样本")
+    print(f"[warn] {direction}: 接口失败 {last_err}，返回空")
     return None
-
-
-def sample_top_models(direction: str, top_n: int = 100,
-                      seed: int = 2025) -> pd.DataFrame:
-    """离线兜底样本：基于已知的 HF Top 模型生态构造近似样本。
-
-    文本生成方向通常有大量 LLM（参数规模大、点赞多、Trans/Diff 框架）；
-    图像分类以中小卷积/Transformer 为主；
-    文本生图以 Stable Diffusion 系列为主（diffusers 框架）。
-    """
-    rng = np.random.default_rng(seed + hash(direction) % 100)
-
-    # 设定各方向下载量 / 点赞 / 框架分布
-    if direction == "text-generation":
-        orgs = ["meta-llama", "Qwen", "microsoft", "mistralai",
-                "google", "baichuan-inc", "THUDM",
-                "deepseek-ai", "01-ai", "HuggingFaceTB"] * 10
-        licenses = np.random.choice(LICENSES, top_n,
-                                    p=[0.18,0.05,0.08,0.04,0.18,
-                                       0.20,0.20,0.07])
-        libraries = np.random.choice(
-            ["Transformers", "PyTorch", "JAX", "Safetensors", "GGUF"],
-            top_n, p=[0.50, 0.30, 0.05, 0.10, 0.05],
-        )
-        base_dl = 8_000_000
-        base_lk = 1_500
-        size_pool = ["small", "medium", "large", "xl"]
-    elif direction == "image-classification":
-        orgs = ["google", "facebook", "microsoft",
-                "timm", "apple", "openai", "OpenGVLab",
-                "Intel", "laion"] * 10
-        licenses = np.random.choice(LICENSES, top_n,
-                                    p=[0.45,0.25,0.10,0.05,0.10,
-                                       0.03,0.01,0.01])
-        libraries = np.random.choice(
-            ["Transformers", "PyTorch", "TensorFlow", "JAX", "Safetensors"],
-            top_n, p=[0.40, 0.35, 0.10, 0.05, 0.10],
-        )
-        base_dl = 1_200_000
-        base_lk = 400
-        size_pool = ["tiny", "small", "base", "medium"]
-    else:  # text-to-image
-        orgs = ["stabilityai", "runwayml", "CompVis",
-                "kandinsky-community", "latent-consistency",
-                "progressiveprompts", "ByteDance",
-                "black-forest-labs", "Tencent-Hunyuan",
-                "stabilityai-sd"] * 10
-        licenses = np.random.choice(LICENSES, top_n,
-                                    p=[0.30,0.05,0.30,0.10,0.10,
-                                       0.03,0.10,0.02])
-        libraries = np.random.choice(
-            ["Diffusers", "Transformers", "PyTorch", "JAX",
-             "Safetensors", "ONNX"],
-            top_n, p=[0.65, 0.10, 0.15, 0.03, 0.05, 0.02],
-        )
-        base_dl = 900_000
-        base_lk = 300
-        size_pool = ["small", "medium", "large"]
-
-    rows = []
-    for i in range(top_n):
-        dl = int(base_dl / (1 + (i * 0.4) ** 0.95) *
-                 (1 + rng.normal(0, 0.05)))
-        lk = int(base_lk / (1 + (i * 0.4) ** 1.0) *
-                 (1 + rng.normal(0, 0.1)))
-        size = rng.choice(size_pool, p=None)
-        org = orgs[i % len(orgs)]
-        rows.append({
-            "model": f"{org}/sample-{direction}-{i+1:03d}",
-            "task": direction,
-            "downloads": max(0, dl),
-            "likes": max(0, lk),
-            "last_modified": pd.Timestamp(
-                "2024-01-01") + pd.Timedelta(days=rng.integers(0, 540)),
-            "library": libraries[i],
-            "license": licenses[i],
-            "tags": f"size:{size}|pipeline:{direction}|"
-                    f"{rng.choice(['arxiv', ''])}",
-            "arxiv": rng.choice([True, False], p=[0.45, 0.55]),
-        })
-    return pd.DataFrame(rows)
 
 
 def main() -> None:
@@ -248,7 +155,8 @@ def main() -> None:
         print(f"\n[采集] {d}")
         df = fetch_top_models(d, top_n=100)
         if df is None or df.empty:
-            df = sample_top_models(d, top_n=100)
+            print(f"[warn] {d} 接口未取到数据，跳过此方向")
+            continue
         df.to_csv(DATA_DIR / f"hf_models_{d}.csv", index=False,
                   encoding="utf-8-sig")
         all_dfs.append(df)

@@ -23,6 +23,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import ast
 import numpy as np
 import pandas as pd
 
@@ -87,7 +88,7 @@ def transform(df: pd.DataFrame) -> pd.DataFrame:
         "salary_hi_w": df["salary_year_avg"].round(1),
         # skills: 形如 "['python', 'sql']" -> "python,sql"
         "skills": df["job_skills"].apply(
-            lambda x: ", ".join(eval(str(x))) if isinstance(x, str)
+            lambda x: ", ".join(ast.literal_eval(str(x))) if isinstance(x, str)
                        and x.startswith("[") else ""),
         "source": "real",
     })
