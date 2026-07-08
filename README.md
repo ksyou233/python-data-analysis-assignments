@@ -1,70 +1,141 @@
-# Python Data Analysis Assignments
+# Python与智能数据分析作业仓库
 
-This repository is the root for the four homework projects under `assignments/`. It collects code, data, figures, and reports for each task in one place.
+本仓库以 `assignments/` 作为仓库根目录，汇总四个作业的代码、数据、图表和报告。README 重点说明每个任务的分析流程、脚本职责和结果产物，方便直接浏览、复现和提交。
 
-## Projects
+## 一、仓库结构
 
-- `hw1_population/` - China major-city population change and factor analysis
-- `hw2_bilibili/` - Bilibili ranking videos and hot comment analysis
-- `hw3_huggingface/` - Hugging Face top-100 model analysis across three directions
-- `hw4_recruit/` - AI job market analysis and salary prediction
+- `hw1_population/`：中国主要城市人口变化与影响因素分析
+- `hw2_bilibili/`：B 站全站排行榜视频与热门评论分析
+- `hw3_huggingface/`：Hugging Face 三方向 Top100 模型分析
+- `hw4_recruit/`：AI 岗位招聘数据分析与薪资预测
 
-## Repository Layout
+每个作业目录基本都遵循同一组织方式：
 
-Each homework folder follows the same structure:
+- `code/`：采集、清洗、分析、建模脚本
+- `data/`：原始数据、清洗结果、中间表和最终输出
+- `figures/`：报告中使用的图表
+- `report.md`：作业报告正文
 
-- `code/` - data collection, cleaning, analysis, and modeling scripts
-- `data/` - raw data, cleaned tables, and intermediate outputs
-- `figures/` - generated charts used in the report
-- `report.md` - final report for the assignment
+部分任务还会在 `data/processed/` 下保存特征表、模型指标和统计汇总文件。
 
-Some projects also include an additional `processed/` subfolder under `data/` for cleaned tables, feature matrices, and model artifacts.
+## 二、统一运行环境
 
-## Data Status
+仓库使用已有的 base Python 环境，默认解释器为：
 
-All four homework projects are currently aligned with real data sources and regenerated outputs:
+- `D:/anaconda/python.exe`
 
-- `hw1_population/` uses official statistical sources and published population bulletins
-- `hw2_bilibili/` uses a live Bilibili crawl plus analysis outputs from the refreshed dataset
-- `hw3_huggingface/` uses the verified Hugging Face model dataset and regenerated figures
-- `hw4_recruit/` uses the verified job-market dataset and regenerated figures
+建议的工作方式：
 
-## How To Run
+1. 进入对应作业目录下的 `code/`
+2. 先运行数据采集或数据加载脚本
+3. 再运行清洗、分析、建模脚本
+4. 查看 `figures/` 中最新图表
+5. 最后阅读 `report.md` 对照结果
 
-Use the existing base Python environment at `D:/anaconda/python.exe`.
-
-Example:
+示例：
 
 ```powershell
 cd "d:\Learning\Python与智能数据分析\assignments\hw4_recruit\code"
 D:/anaconda/python.exe 02_analyze_jobs.py
 ```
 
-Typical workflow:
+## 三、各任务的分析流程
 
-1. Run the data collection or data-loading script in `code/`.
-2. Run the analysis script in `code/`.
-3. Review the regenerated charts under `figures/`.
-4. Read the corresponding `report.md`.
+### 1. hw1_population：人口变化与因素分析
 
-## Git And Ignore Rules
+这一任务的主线是“真实人口数据 → 清洗 → 可视化 → 因素建模 → 文本分析”。
 
-The repository includes a root-level `.gitignore` that already ignores common Python caches, virtual environments, editor files, and temporary artifacts.
+分析流程：
 
-If you want to keep the repository smaller, you can optionally ignore large raw datasets or other derived artifacts in each project folder.
+1. `01b_load_real_population.py` 先从官方数据集和公开统计口径加载真实人口数据，整理出统一的 `pop_basic.csv`。
+2. `02_clean_explore.py` 对人口数据做清洗、异常值处理、描述统计和可视化，输出人口趋势图、自然增长率图、老龄化图、城镇化图等。
+3. `03_model_factor.py` 以自然增长率为目标，结合年龄结构、城镇化率、收入和 GDP 等特征做模型分析，输出模型指标和特征重要性。
+4. `04_text_analysis.py` 对代表性城市统计公报文本做分词、TF-IDF 和词云分析，用文本证据补充数值结论。
 
-## Commit And Push
+脚本重点：
 
-The repository has been initialized with `assignments/` as the git root and pushed to GitHub.
+- `01b_load_real_population.py` 的核心是字段映射和真实数据对齐
+- `02_clean_explore.py` 的核心是保留真实负增长并生成图表
+- `03_model_factor.py` 的核心是特征工程和多模型比较
+- `04_text_analysis.py` 的核心是文本分词、关键词提取和图文交叉讨论
 
-Remote:
+### 2. hw2_bilibili：B 站内容与评论分析
 
-- `git@github.com:ksyou233/Python-.git`
+这一任务的主线是“排行榜爬取 → 评论获取 → 分区统计 → 评论多维分析 → 扩展洞察”。
 
-If you rename the GitHub repository later, update the local remote URL with `git remote set-url origin <new-url>`.
+分析流程：
 
-## Notes
+1. `01_crawl_bilibili.py` 先抓取全站排行榜前 50 视频，再抓取每个视频的热门评论，输出 `top_videos.csv` 和 `hot_comments.csv`。
+2. `02_analyze.py` 对视频做分区统计、互动率计算和播放量关系分析。
+3. 同一脚本继续对评论做情感倾向、意图分类和质量评分。
+4. 最后输出分区×情感热力图、发布时间热力图、播放量与评论情绪关系图和词云。
 
-- Reports are written in Markdown for easy review inside VS Code.
-- Figures are regenerated from the current real datasets rather than older sample outputs.
-- Secrets are kept out of the repository history; environment variables should be used for any token-based access.
+脚本重点：
+
+- `01_crawl_bilibili.py` 的核心是接口抓取、重试、真实数据优先和数据来源标记
+- `02_analyze.py` 的核心是互动率定义、情感分类、意图分类和评论质量评分
+- 报告中重点解释“排行榜头部内容的分区结构”和“评论区社区特征”
+
+### 3. hw3_huggingface：模型生态分析
+
+这一任务的主线是“三方向 Top100 模型抓取 → 清洗 → 统计分析 → 机制建模 → 策略建议”。
+
+分析流程：
+
+1. `01_collect_models.py` 通过 Hugging Face API 或镜像接口抓取三个方向的 Top100 模型，保存原始表。
+2. `02_analyze_models.py` 完成清洗、缺失值补全、参数规模提取、协议整理和结构化特征工程。
+3. 先做方向级统计：下载量、点赞、框架、许可证、参数规模、更新时间等。
+4. 再以 text-generation 为目标方向建立模型，分析哪些特征最能解释模型受欢迎程度。
+5. 最后输出 AI 初创团队的模型设计建议和 6 个月行动路线。
+
+脚本重点：
+
+- `01_collect_models.py` 的核心是统一 API 抓取与样本兜底机制
+- `02_analyze_models.py` 的核心是 `param_b`、`size_label`、`license` 和 `library` 的清洗与建模
+- 报告重点强调真实数据与合成数据的差异，以及真实生态中“下载、点赞、协议、论文”之间的关系
+
+### 4. hw4_recruit：AI 岗位招聘分析
+
+这一任务的主线是“真实招聘数据 → 数据清洗 → 特征工程 → 可视化 → 薪资预测 → 求职建议”。
+
+分析流程：
+
+1. `01_crawl_jobs.py` 读取已验证真实招聘数据并整理成统一的 `ai_jobs.csv`。
+2. `02_analyze_jobs.py` 做清洗、学历与经验编码、方向分类、技能统计和薪资箱线图分析。
+3. 接着建立 Ridge、随机森林和 XGBoost 模型预测薪资。
+4. 最后根据特征重要性和技能频率输出 AI 学生的学习路径和求职建议。
+
+脚本重点：
+
+- `01_crawl_jobs.py` 的核心是优先读取本地真实数据，避免样本混入
+- `02_analyze_jobs.py` 的核心是学历/经验编码、方向划分、技能统计和薪资预测
+- 报告重点解释经验、技能广度、学历、方向和远程岗位对薪资的真实影响
+
+## 四、数据与输出说明
+
+- 各任务的原始数据和最终中间表都保存在对应的 `data/` 目录中
+- 图表均保存在 `figures/` 目录中，报告直接引用这些文件
+- 任务报告统一采用 Markdown 格式，便于在 VS Code 中直接阅读和修改
+
+## 五、Git 与忽略规则
+
+仓库根目录已经配置 `.gitignore`，默认忽略：
+
+- Python 缓存文件
+- 虚拟环境目录
+- 编辑器配置文件
+- 临时文件和日志文件
+
+如需进一步压缩仓库体积，也可以按任务目录追加忽略大文件规则或中间导出文件。
+
+## 六、当前仓库状态
+
+- 仓库根已固定为 `assignments/`
+- 已完成 Git 初始化与 GitHub 推送
+- 当前远程仓库：`git@github.com:ksyou233/python-data-analysis-assignments.git`
+
+## 七、补充说明
+
+- 所有报告都已根据真实数据链路重写，避免沿用旧的合成样本结论
+- 如需重新生成某个任务，建议先运行采集/加载脚本，再运行分析脚本，最后检查报告中的图表和结论是否一致
+- 如果后续新增任务，可以直接在 `assignments/` 下继续扩展为新的 `hw5_*` 目录
