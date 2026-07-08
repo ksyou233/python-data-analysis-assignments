@@ -1,0 +1,18 @@
+﻿task,library,count
+text-generation,transformers,89
+text-generation,Model Optimizer,4
+text-generation,safetensors,4
+text-generation,gguf,2
+text-generation,pytorch,1
+image-classification,timm,67
+image-classification,transformers,29
+image-classification,transformers.js,1
+image-classification,onnx,1
+image-classification,safetensors,1
+image-classification,segmentation-models-pytorch,1
+text-to-image,diffusers,90
+text-to-image,gguf,6
+text-to-image,transformers,1
+text-to-image,cosmos,1
+text-to-image,ggml,1
+text-to-image,comfyUI,1

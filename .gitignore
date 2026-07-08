@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Local secrets / credentials
+.env
+.env.*
+*.key
+*.pem
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Notebook execution cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Git metadata from subfolders, if any
+**/.git/
+
+# Uncomment if you want to keep the repo lightweight and exclude large raw datasets
+# **/data/*.parquet
+# **/data/raw/

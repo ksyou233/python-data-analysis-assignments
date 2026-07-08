@@ -1,0 +1,6 @@
+﻿model,downloads,likes,library,license,param_b
+Qwen/Qwen3-0.6B,28010833,1392,transformers,license:apache-2.0,6.0
+Qwen/Qwen3-8B,16766739,1187,transformers,license:apache-2.0,80.0
+facebook/opt-125m,13961085,273,transformers,license:other,140.0
+openai-community/gpt2,13305312,3331,transformers,license:mit,140.0
+Qwen/Qwen2.5-7B-Instruct,12875414,1405,transformers,license:apache-2.0,70.0

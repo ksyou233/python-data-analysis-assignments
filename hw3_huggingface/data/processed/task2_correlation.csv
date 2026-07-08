@@ -1,0 +1,4 @@
+﻿task,pearson_log,spearman
+text-generation,0.2133,0.1958
+image-classification,0.5798,0.4663
+text-to-image,0.244,0.2291

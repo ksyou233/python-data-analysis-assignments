@@ -1,0 +1,4 @@
+﻿task,license:apache-2.0,license:apple-amlr,license:bsd-3-clause,license:cc-by-nc-3.0,license:cc-by-nc-4.0,license:cc-by-nc-nd-4.0,license:cdla-permissive-2.0,license:creativeml-openrail-m,license:gemma,license:llama3,license:llama3.1,license:llama3.2,license:mit,license:openrail,license:openrail++,license:other,unknown
+image-classification,0.67,0.0,0.02,0.01,0.06,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.12,0.0,0.0,0.05,0.06
+text-generation,0.54,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.04,0.02,0.03,0.04,0.14,0.0,0.0,0.14,0.04
+text-to-image,0.29,0.0,0.0,0.0,0.0,0.01,0.01,0.13,0.0,0.0,0.0,0.0,0.03,0.01,0.11,0.31,0.1
