@@ -1,40 +1,70 @@
-# Python与智能数据分析作业仓库
+# Python Data Analysis Assignments
 
-本仓库以 `assignments/` 作为根目录，汇总四个作业的代码、数据、图表与报告。
+This repository is the root for the four homework projects under `assignments/`. It collects code, data, figures, and reports for each task in one place.
 
-## 目录结构
+## Projects
 
-- `hw1_population/`：中国主要城市人口变化与影响因素分析
-- `hw2_bilibili/`：B 站全站排行榜视频与热门评论分析
-- `hw3_huggingface/`：Hugging Face 三方向 Top100 模型分析
-- `hw4_recruit/`：AI 岗位招聘数据分析与薪资预测
+- `hw1_population/` - China major-city population change and factor analysis
+- `hw2_bilibili/` - Bilibili ranking videos and hot comment analysis
+- `hw3_huggingface/` - Hugging Face top-100 model analysis across three directions
+- `hw4_recruit/` - AI job market analysis and salary prediction
 
-每个作业目录通常包含：
+## Repository Layout
 
-- `code/`：采集、清洗、分析脚本
-- `data/`：原始数据、清洗结果和中间产物
-- `figures/`：分析图表
-- `report.md`：作业报告
+Each homework folder follows the same structure:
 
-## 运行说明
+- `code/` - data collection, cleaning, analysis, and modeling scripts
+- `data/` - raw data, cleaned tables, and intermediate outputs
+- `figures/` - generated charts used in the report
+- `report.md` - final report for the assignment
 
-1. 进入对应作业目录。
-2. 使用已配置的 Python 环境运行 `code/` 下的脚本。
-3. 图表和中间结果会输出到 `data/` 或 `figures/`。
+Some projects also include an additional `processed/` subfolder under `data/` for cleaned tables, feature matrices, and model artifacts.
 
-示例：
+## Data Status
+
+All four homework projects are currently aligned with real data sources and regenerated outputs:
+
+- `hw1_population/` uses official statistical sources and published population bulletins
+- `hw2_bilibili/` uses a live Bilibili crawl plus analysis outputs from the refreshed dataset
+- `hw3_huggingface/` uses the verified Hugging Face model dataset and regenerated figures
+- `hw4_recruit/` uses the verified job-market dataset and regenerated figures
+
+## How To Run
+
+Use the existing base Python environment at `D:/anaconda/python.exe`.
+
+Example:
 
 ```powershell
 cd "d:\Learning\Python与智能数据分析\assignments\hw4_recruit\code"
 D:/anaconda/python.exe 02_analyze_jobs.py
 ```
 
-## 数据说明
+Typical workflow:
 
-- `hw1_population/`、`hw2_bilibili/`、`hw3_huggingface/`、`hw4_recruit/` 都已经按真实数据链路整理。
-- 根级 `.gitignore` 已忽略常见缓存、虚拟环境、编辑器文件和临时文件。
-- 如需进一步压缩仓库体积，可按需要取消注释 `.gitignore` 中的大文件规则。
+1. Run the data collection or data-loading script in `code/`.
+2. Run the analysis script in `code/`.
+3. Review the regenerated charts under `figures/`.
+4. Read the corresponding `report.md`.
 
-## 提交与推送
+## Git And Ignore Rules
 
-当前仓库已在 `assignments/` 下初始化为 git 仓库。若要上传到 GitHub，只需在本地添加远程地址并执行 push。
+The repository includes a root-level `.gitignore` that already ignores common Python caches, virtual environments, editor files, and temporary artifacts.
+
+If you want to keep the repository smaller, you can optionally ignore large raw datasets or other derived artifacts in each project folder.
+
+## Commit And Push
+
+The repository has been initialized with `assignments/` as the git root and pushed to GitHub.
+
+Remote:
+
+- `git@github.com:ksyou233/Python-.git`
+
+If you rename the GitHub repository later, update the local remote URL with `git remote set-url origin <new-url>`.
+
+## Notes
+
+- Reports are written in Markdown for easy review inside VS Code.
+- Figures are regenerated from the current real datasets rather than older sample outputs.
+- Secrets are kept out of the repository history; environment variables should be used for any token-based access.
