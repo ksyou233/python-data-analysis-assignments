@@ -42,11 +42,11 @@ pandas         698
 
 ## XGBoost 模型最重要的 15 个特征
 
-exp_rank               0.588288
-n_skills               0.178092
-edu_rank               0.117134
-direction_NLP/大模型      0.063236
-direction_通用算法/机器学习    0.053249
+exp_rank               0.752614
+n_skills               0.209628
+edu_rank               0.030034
+direction_NLP/大模型      0.003934
+direction_通用算法/机器学习    0.003790
 city_tier_Other        0.000000
 has_LangChain          0.000000
 has_Agent              0.000000

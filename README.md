@@ -20,14 +20,40 @@
 
 ## 二、统一运行环境
 
-仓库使用已有的 base Python 环境，默认解释器为：
+### 2.1 依赖安装
 
-- `D:/anaconda/python.exe`
+项目依赖统一记录在根目录的 `requirements.txt` 中：
 
-建议的工作方式：
+```powershell
+pip install -r requirements.txt
+```
 
-1. 进入对应作业目录下的 `code/`
-2. 先运行数据采集或数据加载脚本
+或使用 conda 逐一安装（部分包如 lightgbm、xgboost 建议用 pip）：
+
+```powershell
+conda install pandas numpy matplotlib seaborn scikit-learn scipy pyarrow requests jieba wordcloud
+pip install snownlp xgboost lightgbm python-docx
+```
+
+### 2.2 关键依赖及用途
+
+| 包名                         | 用途                            | 出现于      |
+| :--------------------------- | :------------------------------ | :---------- |
+| `pandas` / `numpy`       | 数据处理、数值计算              | 全部作业    |
+| `matplotlib` / `seaborn` | 可视化图表                      | 全部作业    |
+| `requests`                 | API 爬取、数据下载              | HW1/HW2/HW3 |
+| `scikit-learn`             | 线性回归、随机森林、Ridge、评估 | HW1/HW3/HW4 |
+| `xgboost` / `lightgbm`   | 梯度提升树模型                  | HW1/HW3/HW4 |
+| `jieba`                    | 中文分词                        | HW1/HW2     |
+| `snownlp`                  | 中文情感分析                    | HW2         |
+| `wordcloud`                | 词云生成                        | HW1/HW2/HW4 |
+| `pyarrow`                  | Parquet 文件读写                | HW1         |
+| `scipy`                    | Pearson 相关系数等统计          | HW2/HW3     |
+| `python-docx`              | 生成 Word 报告                  | 报告生成    |
+
+### 2.3 运行方式
+
+默认解释器为 `D:/anaconda/python.exe`。进入对应作业的 `code/` 目录后执行：
 3. 再运行清洗、分析、建模脚本
 4. 查看 `figures/` 中最新图表
 5. 最后阅读 `report.md` 对照结果
@@ -119,23 +145,15 @@ D:/anaconda/python.exe 02_analyze_jobs.py
 
 ## 五、Git 与忽略规则
 
-仓库根目录已经配置 `.gitignore`，默认忽略：
+仓库配置了 `.gitignore` 忽略以下内容：
 
-- Python 缓存文件
-- 虚拟环境目录
-- 编辑器配置文件
-- 临时文件和日志文件
-
-如需进一步压缩仓库体积，也可以按任务目录追加忽略大文件规则或中间导出文件。
+- `__pycache__/`、`.pyc`、`.pyo`——Python 编译缓存
+- `.venv/`——虚拟环境
+- `*.parquet`——较大的原始数据文件（按需提交）
+- 各作业 `data/` 目录下由脚本自动生成的文件（如 `pop_basic.csv`、`ai_jobs.csv`）
 
 ## 六、当前仓库状态
 
 - 仓库根已固定为 `assignments/`
 - 已完成 Git 初始化与 GitHub 推送
 - 当前远程仓库：`git@github.com:ksyou233/python-data-analysis-assignments.git`
-
-## 七、补充说明
-
-- 所有报告都已根据真实数据链路重写，避免沿用旧的合成样本结论
-- 如需重新生成某个任务，建议先运行采集/加载脚本，再运行分析脚本，最后检查报告中的图表和结论是否一致
-- 如果后续新增任务，可以直接在 `assignments/` 下继续扩展为新的 `hw5_*` 目录

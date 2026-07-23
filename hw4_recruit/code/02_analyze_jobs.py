@@ -261,21 +261,21 @@ def model_salary(df: pd.DataFrame) -> dict:
     print("\n==== 模型评估 ====")
     print(metrics)
 
-    # 特征重要性（XGBoost）
-    imp = pd.Series(xgbr.feature_importances_, index=X.columns)
+    # 特征重要性（最优模型 RandomForest）
+    imp = pd.Series(rf.feature_importances_, index=X.columns)
     imp = imp.sort_values(ascending=False).head(15)
-    imp.to_csv(PROC_DIR / "xgb_importance.csv", encoding="utf-8-sig",
+    imp.to_csv(PROC_DIR / "rf_importance.csv", encoding="utf-8-sig",
                header=["importance"])
 
     plt.figure(figsize=(9, 6))
     plt.barh(imp.index[::-1], imp.values[::-1], color="#756bb1")
-    plt.title("图8 · XGBoost 特征重要性（薪资预测）")
+    plt.title("图8 · RandomForest 特征重要性（薪资预测）")
     plt.xlabel("Importance")
     plt.tight_layout()
-    plt.savefig(FIG_DIR / "fig08_xgb_importance.png", dpi=150,
+    plt.savefig(FIG_DIR / "fig08_rf_importance.png", dpi=150,
                 bbox_inches="tight")
     plt.close()
-    print("[fig] fig08_xgb_importance.png")
+    print("[fig] fig08_rf_importance.png")
 
     # 真实 vs 预测（XGBoost）
     plt.figure(figsize=(8, 6))

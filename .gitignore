@@ -5,6 +5,16 @@ __pycache__/
 *.pyd
 *.so
 
+# Documents
+*.pptx
+*.docx
+wenben.txt
+*.pdf
+答辩演讲稿.md
+ppt_page_analysis.txt
+presentation_flow.md
+presentation_script.md
+
 # Virtual environments
 .venv/
 venv/

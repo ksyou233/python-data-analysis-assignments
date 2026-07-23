@@ -124,21 +124,31 @@ def plot_change_bar(df: pd.DataFrame) -> None:
 
 
 def plot_urban_vs_aging(df: pd.DataFrame) -> None:
+    """
+    气泡图：城镇化率 vs 自然增长率
+    数据来源：各城市统计公报真实城镇化率数据
+    """
     latest = df[df["year"] == 2024].copy()
-    plt.figure(figsize=(8, 6))
-    sizes = (latest["per_capita_gdp"] / 1000).clip(lower=20)
+    plt.figure(figsize=(10, 7))
+    sizes = (latest["resident_pop"] * 3).clip(lower=30)
     sc = plt.scatter(
-        latest["urban_rate"], latest["age_65_plus"],
-        s=sizes, alpha=0.65, c=latest["natural_growth_rate"], cmap="RdYlGn",
-        edgecolor="k",
+        latest["urban_rate"], latest["natural_growth_rate"],
+        s=sizes, alpha=0.7, c=latest["per_capita_gdp"], cmap="viridis",
+        edgecolor="k", linewidth=0.6,
     )
     for _, r in latest.iterrows():
-        plt.annotate(r["city"], (r["urban_rate"], r["age_65_plus"]),
-                     textcoords="offset points", xytext=(4, 4), fontsize=9)
-    plt.colorbar(sc, label="自然增长率（‰）")
-    plt.xlabel("城镇化率（%）")
-    plt.ylabel("65+ 占比（%）")
-    plt.title("2024 年 10 城：城镇化 vs 老龄化（气泡大小=人均GDP/千）")
+        plt.annotate(
+            r["city"],
+            (r["urban_rate"], r["natural_growth_rate"]),
+            textcoords="offset points",
+            xytext=(6, 6),
+            fontsize=9,
+        )
+    cbar = plt.colorbar(sc, label="人均 GDP（元）")
+    cbar.ax.yaxis.label.set_size(10)
+    plt.xlabel("城镇化率（%）", fontsize=11)
+    plt.ylabel("自然增长率（‰）", fontsize=11)
+    plt.title("2024 年各城市：城镇化率 vs 自然增长率\n（气泡大小=常住人口，颜色=人均GDP）", fontsize=12)
     plt.tight_layout()
     plt.savefig(FIG_DIR / "fig08_urban_vs_aging.png", dpi=150, bbox_inches="tight")
     plt.close()

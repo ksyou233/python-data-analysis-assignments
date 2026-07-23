@@ -160,6 +160,27 @@ def main() -> None:
     plt.close()
     print("[fig] fig10_pred_scatter.png")
 
+    # ── 模型效果对比柱状图 ──
+    fig, axes = plt.subplots(1, 3, figsize=(12, 4.5))
+    metrics_display = ["R2", "RMSE", "MAE"]
+    colors_bar = ["#2e86c1", "#28b463", "#e74c3c"]
+    for ax, metric, color in zip(axes, metrics_display, colors_bar):
+        vals = [m_lr[metric], m_rf[metric], m_xgb[metric]]
+        bars = ax.bar(["Linear\nRegression", "Random\nForest", "XGBoost"],
+                      vals, color=color, alpha=0.8, edgecolor="k", linewidth=0.5)
+        for bar, v in zip(bars, vals):
+            ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.02,
+                    f"{v:.4f}", ha="center", va="bottom", fontsize=9)
+        ax.set_title(metric, fontsize=12)
+        ax.set_ylabel(metric)
+        ax.set_ylim(0, max(vals) * 1.3 if metric != "R2" else 1.0)
+        ax.grid(axis="y", alpha=0.3)
+    plt.suptitle("三模型效果对比（测试集）", fontsize=14, y=1.02)
+    plt.tight_layout()
+    plt.savefig(FIG_DIR / "fig13_model_comparison.png", dpi=150, bbox_inches="tight")
+    plt.close()
+    print("[fig] fig13_model_comparison.png")
+
     # 保存评估结果
     res.to_csv(DATA_DIR / "model_metrics.csv", encoding="utf-8-sig")
     imp.to_csv(DATA_DIR / "feature_importance.csv", encoding="utf-8-sig",
